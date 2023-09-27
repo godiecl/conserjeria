@@ -1,0 +1,63 @@
+@startuml
+'left to right direction
+skin rose
+set separator none
+hide empty members
+
+package io.ebean.Database <<extern>> {
+    class Database {
+    }
+}
+
+package cl.ucn.disc.as.conserjeria.model {
+
+    class BaseModel <<abstract>> {
+        - {static} id: Long
+        - created: Instant
+        - modified: Instant
+        - version: Long
+    }
+
+    class Departamento {
+        - numero: Integer
+        - piso: Integer
+        + Departamento(numero: Integer, piso: Integer)
+        + getNumero(): Integer
+        + getPiso(): Integer
+    }
+    Departamento --|> BaseModel
+
+    class Edificio {
+        - nombre: String
+        - direccion: String
+        + Edificio(nombre: String, direccion: String)
+        + add(departamento: Departamento): void
+        + getNombre(): String
+        + getEdificio(): String
+        + getDepartamento(): List<Departamento>
+    }
+    Edificio --|> BaseModel
+    Edificio --> "*" Departamento: - List<Departamento> departamentos
+
+}
+
+package cl.ucn.disc.as.conserjeria.services {
+
+    interface Sistema {
+        + add(edificio: Edificio): Edificio
+        + addDepartamento(departamento: Departamento, edificio: Edificio): Departamento
+        + addDuenio(duenio: Persona, departamento: Departamento): Dueño
+        + realizarContrato(duenio: Persona, fechaPago: Instant): Contrato
+    }
+    Sistema ..> Edificio
+    Sistema ..> Departamento
+
+    class SistemaImpl {
+        + SistemaImpl(database: Database)
+    }
+    SistemaImpl ..|> Sistema
+    SistemaImpl --> "1" Database
+
+}
+
+@enduml
