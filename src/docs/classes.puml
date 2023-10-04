@@ -16,6 +16,15 @@ package cl.ucn.disc.as.conserjeria.model {
         - created: Instant
         - modified: Instant
         - version: Long
+        + BaseModel(..)
+        + getId(): Long
+        + getCreated(): Instant
+        + getModified(): Instant
+        + getVersion(): Long
+        # setId(id: Long): void
+        # setCreated(created: Instant): void
+        # setModified(modified: Instant): void
+        # setVersion(version: Long): void
     }
 
     class Departamento {
@@ -30,14 +39,54 @@ package cl.ucn.disc.as.conserjeria.model {
     class Edificio {
         - nombre: String
         - direccion: String
+        --
         + Edificio(nombre: String, direccion: String)
-        + add(departamento: Departamento): void
         + getNombre(): String
         + getEdificio(): String
+        ..
+        + add(departamento: Departamento): void
         + getDepartamento(): List<Departamento>
     }
     Edificio --|> BaseModel
     Edificio --> "*" Departamento: - List<Departamento> departamentos
+
+    class Persona {
+        - rut: String
+        - nombre: String
+        - apellidos: String
+        - email: String
+        - telefono: String
+        + Persona(rut: String, nombre: String, apellidos: String, email: String, telefono: String)
+        + getRut(): String
+        + getNombre(): String
+        + getApellidos(): String
+        + getEmail(): String
+        + getTelefono(): String
+    }
+    Persona --|> BaseModel
+
+    class Contrato {
+        - fechaPago: Instant
+        --
+        + Contrato(persona: Persona, departamento: Departamento, fechaPago: Instant)
+        + getFechaPago(): Instant
+        ..
+        + getPersona(): Persona
+        + getDepartamento(): Departamento
+        + getPagos(): List<Pago>
+    }
+    Contrato --|> BaseModel
+    Contrato --> "1" Persona: - persona: Persona
+    Contrato --> "1" Departamento: - departamento: Departamento
+
+    class Pago {
+        - fechaPago: Instant
+        - monto: Integer
+        + Pago(fechaPago: Instant, monto: Integer)
+        + getFechaPago(): Instant
+        + getMonto(): Integer
+    }
+    Pago "*" <-- Contrato: - pagos: List<Pago>
 
 }
 
@@ -45,12 +94,23 @@ package cl.ucn.disc.as.conserjeria.services {
 
     interface Sistema {
         + add(edificio: Edificio): Edificio
+        + add(persona: Persona): Persona
+        ..
         + addDepartamento(departamento: Departamento, edificio: Edificio): Departamento
-        + addDuenio(duenio: Persona, departamento: Departamento): Dueño
-        + realizarContrato(duenio: Persona, fechaPago: Instant): Contrato
+        + addDepartamento(departamento: Departamento, idEdificio: Long): Departamento
+        ..
+        + realizarContrato(duenio: Persona, departamento: Departamento, fechaPago: Instant): Contrato
+        + realizarContrato(idDuenio: Long, idDepartamento: Long, fechaPago: Instant): Contrato
+        ..
+        + getContratos(): List<Contrato>
+        + getPersonas(): List<Persona>
+        + getPagos(rut: String): List<Pago>
     }
-    Sistema ..> Edificio
-    Sistema ..> Departamento
+    Sistema ..> Edificio: <<uses>>
+    Sistema ..> Departamento: <<uses>>
+    Sistema ..> Contrato: <<uses>>
+    Sistema ..> Persona: <<uses>>
+    Sistema ..> Pago: <<uses>>
 
     class SistemaImpl {
         + SistemaImpl(database: Database)
