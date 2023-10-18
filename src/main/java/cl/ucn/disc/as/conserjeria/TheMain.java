@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Arquitectura de Software.
  */
 @Slf4j
-public final class Main {
+public final class TheMain {
 
     /**
      * The Main.
