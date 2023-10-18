@@ -19,6 +19,7 @@ import javax.persistence.Entity;
  *
  * @author Arquitectura de Software.
  */
+@Getter
 @ToString(callSuper = true)
 @AllArgsConstructor
 @Builder
@@ -28,35 +29,30 @@ public class Persona extends BaseModel {
     /**
      * The RUT.
      */
-    @Getter
     @NotNull
     private String rut;
 
     /**
      * The Nombre.
      */
-    @Getter
     @NotNull
     private String nombre;
 
     /**
      * The Apellidos.
      */
-    @Getter
     @NotNull
     private String apellidos;
 
     /**
      * The Email.
      */
-    @Getter
     @NotNull
     private String email;
 
     /**
      * The Telefono.
      */
-    @Getter
     @NotNull
     private String telefono;
 
