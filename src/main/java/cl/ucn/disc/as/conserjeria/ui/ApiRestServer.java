@@ -38,15 +38,12 @@ public final class ApiRestServer {
      * @return the configured Gson.
      */
     private static Gson createAndConfigureGson() {
+
         // Instant serializer
         TypeAdapter<Instant> instantTypeAdapter = new TypeAdapter<>() {
 
             /**
-             * Writes one JSON value (an array, object, string, number, boolean or null)
-             * for {@code value}.
-             *
-             * @param out
-             * @param instant the Java object to write. May be null.
+             * Instant to Long
              */
             @Override
             public void write(JsonWriter out, Instant instant) throws IOException {
@@ -58,11 +55,7 @@ public final class ApiRestServer {
             }
 
             /**
-             * Reads one JSON value (an array, object, string, number, boolean or null)
-             * and converts it to a Java object. Returns the converted object.
-             *
-             * @param in
-             * @return the converted Java object. May be null.
+             * Long to Instant
              */
             @Override
             public Instant read(JsonReader in) throws IOException {
@@ -74,7 +67,7 @@ public final class ApiRestServer {
             }
         };
 
-        // the gson serializer
+        // the Gson serializer
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Instant.class, instantTypeAdapter)
@@ -88,6 +81,7 @@ public final class ApiRestServer {
      * @return the configured Javalin server.
      */
     private static Javalin createAndConfigureJavalin() {
+
         // gson config
         JsonMapper jsonMapper = new JsonMapper() {
 
@@ -115,11 +109,22 @@ public final class ApiRestServer {
 
         // configure the server.
         return Javalin.create(config -> {
+
+            // json mapper configuration
             config.jsonMapper(jsonMapper);
+
+            // gzip compression
             config.compression.gzipOnly(9);
+            // WARN: brotli need a native dll
+            // config.compression.brotliAndGzip(9, 9);
+
+            // enable logger
             config.requestLogger.http((ctx, ms) -> {
                 log.debug("served: {} in {} ms.", ctx.fullUrl(), ms);
             });
+
+            // enable debug logger
+            config.plugins.enableDevLogging();
         });
     }
 
@@ -128,7 +133,7 @@ public final class ApiRestServer {
      *
      * @param port to use.
      */
-    public static void start(final Integer port, final RoutesConfigurator routesConfigurator) {
+    public static Javalin start(final Integer port, final RoutesConfigurator routesConfigurator) {
         if (port < 1024 || port > 65535) {
             log.error("Bad port {}.", port);
             throw new IllegalArgumentException("Bad port: " + port);
@@ -142,7 +147,8 @@ public final class ApiRestServer {
         routesConfigurator.configure(app);
 
         // the hookup thread
-        Runtime.getRuntime().addShutdownHook(new Thread(app::stop));
+        Runtime.getRuntime()
+               .addShutdownHook(new Thread(app::stop));
 
         // hooks to detect the shutdown
         app.events(event -> {
@@ -162,7 +168,7 @@ public final class ApiRestServer {
 
 
         // start!
-        app.start(port);
+        return app.start(port);
     }
 
 
