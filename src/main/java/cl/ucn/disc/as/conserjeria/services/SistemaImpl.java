@@ -9,6 +9,10 @@ import cl.ucn.disc.as.conserjeria.exceptions.SistemaException;
 import cl.ucn.disc.as.conserjeria.model.Departamento;
 import cl.ucn.disc.as.conserjeria.model.Edificio;
 import cl.ucn.disc.as.conserjeria.model.Persona;
+import cl.ucn.disc.as.utils.ValidationUtils;
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import io.ebean.Database;
 import io.ebean.Transaction;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.PersistenceException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -45,15 +50,42 @@ public class SistemaImpl implements Sistema {
      */
     @Override
     public void populate() {
+
         // build the persona
-        Persona persona = Persona.builder()
-                .rut("76086428-5")
-                .nombre("Diego")
-                .apellidos("Urrutia Astorga")
-                .email("durrutia@ucn.cl")
-                .telefono("+5622355166")
-                .build();
-        this.database.save(persona);
+        {
+            Persona persona = Persona.builder()
+                    .rut("76086428-5")
+                    .nombre("Diego")
+                    .apellidos("Urrutia Astorga")
+                    .email("durrutia@ucn.cl")
+                    .telefono("+5622355166")
+                    .build();
+            this.database.save(persona);
+        }
+
+        // the faker
+        Locale locale = new Locale("es-CL");
+        FakeValuesService fvs = new FakeValuesService(locale, new RandomService());
+        Faker faker = new Faker(locale);
+
+        // faker
+        for (int i = 0; i < 1000; i++) {
+            // generate the rut
+            String rut = fvs.bothify("########")
+                    // remove the leading zeros
+                    .replaceFirst("^0+(?!$)", "");
+            String dv = ValidationUtils.dv(rut);
+
+            Persona persona = Persona.builder()
+                    .rut(rut + "-" + dv)
+                    .nombre(faker.name().firstName())
+                    .apellidos(faker.name().lastName())
+                    .email(fvs.bothify("????##@gmail.com"))
+                    .telefono(fvs.bothify("+569########"))
+                    .build();
+            this.database.save(persona);
+        }
+
     }
 
     /**
