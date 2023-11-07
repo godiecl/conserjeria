@@ -4,6 +4,7 @@
 
 package cl.ucn.disc.as.conserjeria.model;
 
+import io.ebean.annotation.SoftDelete;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 import lombok.Getter;
@@ -55,5 +56,11 @@ public abstract class BaseModel {
     @Setter
     @WhenModified
     private Instant modified;
+
+    /**
+     * Softdelete.
+     */
+    @SoftDelete
+    boolean deleted;
 
 }
