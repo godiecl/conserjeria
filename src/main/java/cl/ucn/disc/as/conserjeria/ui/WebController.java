@@ -42,11 +42,11 @@ public final class WebController implements RoutesConfigurator {
         });
 
         // the personas api
-        app.get("/personas", ctx -> {
+        app.get("/api/personas", ctx -> {
             ctx.json(this.sistema.getPersonas());
         });
 
-        app.get("/personas/rut/{rut}", ctx -> {
+        app.get("/api/personas/rut/{rut}", ctx -> {
 
             String rut = ctx.pathParam("rut");
             Optional<Persona> oPersona = this.sistema.getPersona(rut);
