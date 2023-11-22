@@ -1,14 +1,21 @@
 # The Conserjeria Project
 
+![Course: Arquitectura de Sistemas](https://img.shields.io/badge/course-Arquitectura%20de%20Sistemas-blue)
+![Date: II semestre 2023](https://img.shields.io/badge/date-II%20semestre%202023-yellow)
+
+![Carrera: Ingeniería Civil en Computación e Informática](https://img.shields.io/badge/carrera-Ingenier%C3%ADa%20Civil%20en%20Computaci%C3%B3n%20e%20Inform%C3%A1tica-red)
+
 ## Description
 
-- **Course**: Arquitecura de Sistemas.
-- **Date**: II semester 2023.
+A concierge system is a service-oriented platform designed to assist individuals with personal requests and tasks. It
+typically operates within hospitality settings such as hotels, offering guests tailored information and services ranging
+from travel arrangements to event bookings. The system is manned by concierges who are knowledgeable, resourceful, and
+skilled in providing high-quality customer service. They act as liaisons, connecting clients with desired experiences
+and conveniences. Advanced concierge systems may also incorporate digital solutions to enhance efficiency and
+accessibility.
 
-![Date: II semestre 2023](https://img.shields.io/badge/date-II%20semestre%202023-yellow)
-![Course: Arquitectura de Sistemas](https://img.shields.io/badge/course-Arquitectura%20de%20Sistemas-blue)
-![Carrera: Ingeniería Civil en Computación e Informática](https://img.shields.io/badge/carrera-Ingenier%C3%ADa%20Civil%20en%20Computaci%C3%B3n%20e%20Inform%C3%A1tica-red)
 ![Last Commit](https://img.shields.io/github/last-commit/godiecl/conserjeria)
+
 ![License](https://img.shields.io/github/license/godiecl/conserjeria)
 
 ## Tools
