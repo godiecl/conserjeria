@@ -1,16 +1,16 @@
 buildscript {
     ext {
-        ebeanVersion = '13.25.1'
-        sqliteVersion = '3.44.0.0'
+        ebeanVersion = '13.25.2'
+        sqliteVersion = '3.44.1.0'
         javalinVersion = '5.6.3'
 
         lombokVersion = '1.18.30'
         gsonVersion = '2.10.1'
-        logbackVersion = '1.4.11'
+        logbackVersion = '1.4.14'
         commonsLangVersion = '3.14.0'
         javaFakerVersion = '1.0.2'
 
-        grpcVersion = '1.59.0'
+        grpcVersion = '1.60.0'
         protobufVersion = '3.21.12'
 
         protobufPluginVersion = '0.9.4'
